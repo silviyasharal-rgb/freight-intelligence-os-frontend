@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "installCommand": "npm install --prefix \"freight intelligence os frontend\"",
+  "buildCommand": "npm --prefix \"freight intelligence os frontend\" run build",
+  "framework": "nextjs"
+}
