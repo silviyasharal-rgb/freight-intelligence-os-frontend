@@ -1,0 +1,16 @@
+{
+  "name": "freight-intelligence-os",
+  "private": true,
+  "workspaces": [
+    "freight intelligence os frontend"
+  ],
+  "scripts": {
+    "dev": "npm --prefix \"freight intelligence os frontend\" run dev",
+    "build": "npm --prefix \"freight intelligence os frontend\" run build",
+    "start": "npm --prefix \"freight intelligence os frontend\" run start",
+    "lint": "npm --prefix \"freight intelligence os frontend\" run lint"
+  },
+  "devDependencies": {
+    "vite": "^8.2.0"
+  }
+}
