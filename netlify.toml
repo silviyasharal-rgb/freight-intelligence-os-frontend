@@ -1,0 +1,6 @@
+[build]
+  command = "npm run build --prefix freight-intelligence-os-frontend"
+  publish = "freight-intelligence-os-frontend/.next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

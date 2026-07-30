@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "installCommand": "npm install --prefix \"freight intelligence os frontend\"",
-  "buildCommand": "npm run build --prefix \"freight intelligence os frontend\"",
+  "installCommand": "npm install --prefix \"freight-intelligence-os-frontend\"",
+  "buildCommand": "npm run build --prefix \"freight-intelligence-os-frontend\"",
   "framework": "nextjs"
 }
