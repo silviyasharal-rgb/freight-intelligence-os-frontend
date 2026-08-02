@@ -1,3 +1,6 @@
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link"
 import {
   ArrowRight,
@@ -30,6 +33,7 @@ function matchColor(score: number) {
 }
 
 export default function LoadsPage() {
+  const router = useRouter();
   const available = loads.filter((l) => l.status === "available")
   const active = loads.filter((l) => l.status !== "available")
   const idleTrucks = vehicles.filter((v) => v.status === "idle").length

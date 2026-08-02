@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Lock, User } from "lucide-react"
 import { useRouter } from "next/navigation"
-
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -16,6 +17,19 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  useEffect(() => {
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("authToken") ||
+          localStorage.getItem("authUser") ||
+          localStorage.getItem("user")
+        : null
+
+    if (token) {
+      router.replace("/loads")
+    }
+  }, [router])
+
   async function handleSignIn(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
@@ -26,21 +40,34 @@ export default function LoginPage() {
 
     setLoading(true)
     try {
+      console.log("Email:", email);
+      console.log("Password:", password);
       // Demo frontend-only auth: store a simple token locally.
       // Replace with real API call to authenticate against a backend.
-      const token = btoa(`${email}:${Date.now()}`)
-      localStorage.setItem("authToken", token)
-      // optionally store user info
-      localStorage.setItem("authUser", JSON.stringify({ email }))
-      router.push("/")
-    } catch (err) {
-      setError("Sign-in failed. Please try again.")
-    } finally {
-      setLoading(false)
-    }
-  }
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password
+      );
+      localStorage.setItem("authToken", userCredential.user.uid);
+      localStorage.setItem("authUser", JSON.stringify(userCredential.user));
+      localStorage.setItem("user", JSON.stringify(userCredential.user));
+      console.log("Logged in:", userCredential.user.email);
+      console.log("Login Success");
 
-  return (
+      router.push("/");
+    } catch (err: any) {
+  console.error("Firebase Error:", err);
+  console.error("Error Code:", err.code);
+  console.error("Error Message:", err.message);
+
+  setError(err.code);
+} finally {
+  setLoading(false);
+}
+}   // <-- handleSignIn function ends here
+
+return (
     <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center relative">
       <div className="absolute inset-0 bg-black/65 backdrop-blur-sm" />
 
@@ -87,11 +114,16 @@ export default function LoginPage() {
 
               <div className="flex items-center justify-between text-sm text-muted-foreground">
                 <button type="button" className="text-left text-primary hover:underline" onClick={() => alert('Password reset flow not implemented yet')}>Forgot password?</button>
-                <button type="button" className="text-right text-secondary hover:underline" onClick={() => alert('Account creation not implemented yet')}>Create account</button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+                <button
+  type="button"
+  className="text-right text-secondary hover:underline"
+  onClick={() => router.push("/signup")}
+>
+  Create account
+</button>
+</div>
+</form>
+          </CardContent>        </Card>
 
         <div className="mt-6 rounded-3xl border border-indigo-600/40 bg-indigo-900/40 p-4 text-sm text-slate-200">
           <div className="flex items-center gap-2 font-semibold text-indigo-300">

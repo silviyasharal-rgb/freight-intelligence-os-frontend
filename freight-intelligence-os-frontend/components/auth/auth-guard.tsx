@@ -8,11 +8,14 @@ export default function AuthGuard({ children }: { children: ReactNode }) {
   const router = useRouter()
 
   useEffect(() => {
-    const publicPaths = ["/login", "/_next", "/api"]
+    const publicPaths = ["/login", "/signup", "/_next", "/api"]
     // allow next internal assets and api routes
     if (publicPaths.some((p) => pathname?.startsWith(p))) return
 
-    const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null
+    const token =
+      typeof window !== "undefined"
+        ? localStorage.getItem("authToken") || localStorage.getItem("authUser")
+        : null
     if (!token) {
       router.push("/login")
     }

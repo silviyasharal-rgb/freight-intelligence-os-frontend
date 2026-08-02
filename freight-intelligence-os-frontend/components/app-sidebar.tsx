@@ -107,6 +107,7 @@ export function AppSidebar() {
                 try {
                   localStorage.removeItem("authToken")
                   localStorage.removeItem("authUser")
+                  localStorage.removeItem("user")
                 } catch (e) {
                   // ignore
                 }
