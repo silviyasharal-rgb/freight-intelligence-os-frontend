@@ -107,6 +107,15 @@ return (
                 {loading ? "Signing in…" : "Sign in"}
               </Button>
 
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => router.push("/")}
+              >
+                Return to home
+              </Button>
+
               <div className="flex items-center justify-between text-sm text-muted-foreground">
                 <button type="button" className="text-left text-primary hover:underline" onClick={() => alert('Password reset flow not implemented yet')}>Forgot password?</button>
                 <button

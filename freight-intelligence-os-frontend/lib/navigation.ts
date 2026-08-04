@@ -50,13 +50,15 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Finance",
-    items: [
-      { title: "Fuel & Expenses", href: "/fuel", icon: Fuel },
-      { title: "Tolls & FASTag", href: "/tolls", icon: Receipt },
-      { title: "Invoices & GST", href: "/invoices", icon: FileSpreadsheet },
-    ],
-  },
+  
+  label: "Finance",
+  items: [
+    { title: "Fuel", href: "/fuel", icon: Fuel },
+    { title: "Expenses", href: "/expenses", icon: Receipt },
+    { title: "Tolls & FASTag", href: "/tolls", icon: Receipt },
+    { title: "Invoices & GST", href: "/invoices", icon: FileSpreadsheet },
+  ],
+},  
   {
     label: "People & Assets",
     items: [

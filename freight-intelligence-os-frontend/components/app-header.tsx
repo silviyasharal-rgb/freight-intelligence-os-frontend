@@ -1,12 +1,14 @@
 "use client"
 
-import { usePathname } from "next/navigation"
-import { Bell, Search, ChevronDown } from "lucide-react"
+import { usePathname, useRouter } from "next/navigation"
+import { Bell, Search, ChevronDown, Home, LogOut } from "lucide-react"
+import { signOut } from "firebase/auth"
 
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { auth } from "@/lib/firebase"
 import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
@@ -23,9 +25,28 @@ const roles = ["Admin", "Fleet Owner", "Dispatcher", "Driver"]
 
 export function AppHeader() {
   const pathname = usePathname()
+  const router = useRouter()
   const current = allNavItems.find((i) =>
     i.href === "/" ? pathname === "/" : pathname.startsWith(i.href),
   )
+
+  async function handleSignOut() {
+    try {
+      await signOut(auth)
+    } catch (error) {
+      console.error("Sign out failed", error)
+    }
+
+    try {
+      localStorage.removeItem("authToken")
+      localStorage.removeItem("authUser")
+      localStorage.removeItem("user")
+    } catch (error) {
+      console.error("Unable to clear local storage", error)
+    }
+
+    router.replace("/login")
+  }
 
   return (
     <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b border-border bg-card/80 px-4 backdrop-blur">
@@ -48,6 +69,16 @@ export function AppHeader() {
             className="w-56 bg-background pl-9 lg:w-72"
           />
         </div>
+
+        <Button variant="outline" size="sm" className="gap-1" onClick={() => router.push("/")}>
+          <Home className="size-3.5" />
+          Home
+        </Button>
+
+        <Button variant="outline" size="sm" className="gap-1" onClick={handleSignOut}>
+          <LogOut className="size-3.5" />
+          Sign out
+        </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger
