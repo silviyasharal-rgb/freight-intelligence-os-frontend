@@ -1,7 +1,6 @@
 import { Route, Fuel, Clock, IndianRupee, Sparkles } from "lucide-react"
 
 import { PageIntro, StatCard } from "@/components/dashboard/kit"
-import { RouteMap } from "@/components/routes/route-map"
 import { optimizedRoute } from "@/lib/mock-data"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -10,6 +9,7 @@ import { cn } from "@/lib/utils"
 
 export default function RoutesPage() {
   const r = optimizedRoute
+
   return (
     <div className="flex flex-col gap-6">
       <PageIntro
@@ -42,7 +42,7 @@ export default function RoutesPage() {
           </CardHeader>
           <CardContent className="p-0">
             <div className="h-[420px] w-full">
-              <RouteMap stops={r.stops} />
+              
             </div>
           </CardContent>
         </Card>

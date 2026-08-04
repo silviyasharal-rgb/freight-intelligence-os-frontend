@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link"
 import {
@@ -17,7 +17,6 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { PageIntro, StatCard } from "@/components/dashboard/kit"
-import { loads, vehicles } from "@/lib/mock-data"
 
 const statusMeta: Record<string, string> = {
   "in-transit": "border-emerald-500/40 bg-emerald-500/10 text-emerald-600",
@@ -34,22 +33,55 @@ function matchColor(score: number) {
 
 export default function LoadsPage() {
   const router = useRouter();
-  const available = loads.filter((l) => l.status === "available")
-  const active = loads.filter((l) => l.status !== "available")
-  const idleTrucks = vehicles.filter((v) => v.status === "idle").length
-  const totalValue = loads.reduce((s, l) => s + l.rate, 0)
+  useEffect(() => {
+  async function fetchData() {
+    const loadsRes = await fetch("/api/loads")
+    const loadsData = await loadsRes.json()
+    setLoads(loadsData)
 
+    const vehiclesRes = await fetch("/api/vehicles")
+    const vehiclesData = await vehiclesRes.json()
+    setVehicles(vehiclesData)
+  }
+
+  fetchData()
+}, [])
+  const [loads, setLoads] = useState<any[]>([])
+    const [vehicles, setVehicles] = useState<any[]>([])
+
+const available = loads.filter((l) => l.status === "Open")
+const active = loads.filter((l) => l.status !== "Open")
+
+const idleTrucks = vehicles.filter(
+  (v) => v.status === "idle"
+).length
+
+const totalValue = loads.reduce(
+  (sum, load) => sum + Number(load.rate || 0),
+  0
+)
   return (
     <div className="flex flex-col gap-6">
       <PageIntro
         title="AI Load Matching"
         description="Our engine scores every open load against your available trucks by lane, rate, deadhead, and driver fit — surfacing the most profitable matches first."
         actions={
-          <Button className="gap-2">
-            <Sparkles className="size-4" />
-            Auto-match all
-          </Button>
-        }
+  <div className="flex gap-2">
+    <Button
+      variant="outline"
+      className="gap-2"
+    >
+      <Sparkles className="size-4" />
+      Auto-match all
+    </Button>
+
+    <Button
+      onClick={() => router.push("/loads/add")}
+    >
+      Add Load
+    </Button>
+  </div>
+}
       />
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

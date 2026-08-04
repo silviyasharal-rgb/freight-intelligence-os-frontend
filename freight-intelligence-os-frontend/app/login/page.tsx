@@ -40,32 +40,27 @@ export default function LoginPage() {
 
     setLoading(true)
     try {
-      console.log("Email:", email);
-      console.log("Password:", password);
-      // Demo frontend-only auth: store a simple token locally.
-      // Replace with real API call to authenticate against a backend.
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email.trim(),
         password
-      );
-      localStorage.setItem("authToken", userCredential.user.uid);
-      localStorage.setItem("authUser", JSON.stringify(userCredential.user));
-      localStorage.setItem("user", JSON.stringify(userCredential.user));
-      console.log("Logged in:", userCredential.user.email);
-      console.log("Login Success");
+      )
 
-      router.push("/");
+      localStorage.setItem("authToken", userCredential.user.uid)
+      localStorage.setItem("authUser", JSON.stringify(userCredential.user))
+      localStorage.setItem("user", JSON.stringify(userCredential.user))
+
+      router.push("/loads")
     } catch (err: any) {
-  console.error("Firebase Error:", err);
-  console.error("Error Code:", err.code);
-  console.error("Error Message:", err.message);
+      console.error("Firebase Error:", err)
+      console.error("Error Code:", err.code)
+      console.error("Error Message:", err.message)
 
-  setError(err.code);
-} finally {
-  setLoading(false);
-}
-}   // <-- handleSignIn function ends here
+      setError(err.code || "Login failed")
+    } finally {
+      setLoading(false)
+    }
+  }
 
 return (
     <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center relative">

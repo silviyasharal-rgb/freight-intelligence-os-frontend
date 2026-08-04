@@ -1,27 +1,51 @@
+"use client"
+import { useEffect, useState } from "react"
 import { Plus, Truck, Activity, CircleParking, Wrench } from "lucide-react"
-
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { PageIntro, StatCard } from "@/components/dashboard/kit"
 import { FleetView } from "@/components/fleet/fleet-view"
-import { vehicles } from "@/lib/mock-data"
 
 export default function FleetPage() {
+  const router = useRouter()
+  const [vehicles, setVehicles] = useState<any[]>([])
+  useEffect(() => {
+
+  async function fetchVehicles() {
+
+    const res = await fetch("/api/vehicles")
+
+    const data = await res.json()
+
+    setVehicles(data)
+
+  }
+
+  fetchVehicles()
+
+}, [])
   const total = vehicles.length
   const onTrip = vehicles.filter((v) => v.status === "on-trip").length
   const idle = vehicles.filter((v) => v.status === "idle").length
   const maint = vehicles.filter((v) => v.status === "maintenance").length
-  const avgHealth = Math.round(vehicles.reduce((s, v) => s + v.healthScore, 0) / total)
-
+  const avgHealth = total
+  ? Math.round(
+      vehicles.reduce((s, v) => s + (v.healthScore || 0), 0) / total
+    )
+  : 0
   return (
     <div className="flex flex-col gap-6">
       <PageIntro
         title="Fleet Management"
         description="Track every vehicle's status, health, assignment, and utilization across your fleet in one place."
         actions={
-          <Button className="gap-2">
-            <Plus className="size-4" />
-            Add Vehicle
-          </Button>
+          <Button 
+  className="gap-2"
+  onClick={() => router.push("/fleet/add")}
+>
+  <Plus className="size-4" />
+  Add Vehicle
+</Button>
         }
       />
 
